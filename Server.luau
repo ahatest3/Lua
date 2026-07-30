@@ -1277,6 +1277,10 @@
 
 local dropExcludes = {
 "Boulder",
+"Nail",
+"Wool Plant Seed",
+"Wooden Arrow",
+"Lighter",
 
 }
 		local function GetDropEntries()
