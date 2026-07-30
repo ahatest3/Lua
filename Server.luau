@@ -15,7 +15,6 @@ Flags.NodeEspDistance = 500
 Flags.MiniEspDistance = 500
 Flags.PlantEspDistance = 500
 Flags.RaidEspDistance = 2000
-Flags.TcEspDistance = 500
 Flags.FovColor = Color3.fromRGB(255, 255, 255)
 Flags.FovAlpha = 1
 Flags.SnaplineColor = Color3.fromRGB(255, 255, 255)
@@ -50,6 +49,8 @@ Flags.FireRateMult = 1
 --//added
 Flags.TcAlpha = 1
 Flags.TcColor = Color3.new(0.60, 0.83, 1)
+Flags.TcEspDistance = 500
+
 
 
 local BulletInfo = {
@@ -536,11 +537,11 @@ local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/neaxusxgo
 	or INSui
 
 local Win = Lib:CreateWindow({
-	title = "Divine.land",
+	title = "Fuzzy's Resistance",
 	subtitle = "auto",
-	size = Vector2.new(720, 540),
+	size = Vector2.new(800, 600),
 	menuKey = "rightshift",
-	configFolder = "divineland",
+	configFolder = "fuzzysresistance",
 	configName = "default",
 	opacity = 1,
 	gameInput = false,
@@ -560,7 +561,7 @@ Win:AddSettingsTab("cog")
 -- combat
 local CombatTab = Win:Tab("Combat", "crosshair")
 
-local AimbotSec = CombatTab:Section("Aimbot", "Left")
+--[[local AimbotSec = CombatTab:Section("Aimbot", "Left")
 
 local AimbotToggle = AimbotSec:Toggle("Aimbot", false, function(Bool)
 	Flags.Aimbot = Bool
@@ -609,7 +610,7 @@ end)
 SnaplineToggle:AddColorpicker("Snapline Color", Color3.fromRGB(255, 255, 255), function(C, A)
 	Flags.SnaplineColor = C
 	Flags.SnaplineAlpha = A
-end)
+end)--]]
 
 local GunModsSec = CombatTab:Section("Gun Mods", "Right")
 
@@ -763,7 +764,7 @@ local TcToggle = BaseSec:Toggle("Tool Cabinet ESP", false, function(Bool)
 	Flags.TcEsp = Bool
 end)
 
-TcToggle:AddColorpicker("Tc Color", Color3.new(0.60, 0.83, 1), function(C,A)
+TcToggle:AddColorpicker("Tc Color", Color3.new(0.6, 0.831373, 1), function(C,A)
 	Flags.TcColor = C
 	Flags.TcAlpha = A
 end)
@@ -1624,11 +1625,11 @@ do
 				table.insert(NewCache, E)
 			end
 		end
-		if Flags.TcEsp then
+		--[[if Flags.TcEsp then
 			for _, E in GetTcEntries() do
 				table.insert(NewCache, E)
 			end
-		end
+		end--]]
 		EspCache = NewCache
 	end
 
