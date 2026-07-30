@@ -844,15 +844,6 @@ MiscEspSec:Slider("Raid Distance", 2000, 100, 500, 5000, "m", function(v)
 end)
 -- end of misc esp
 
--- movement
-local MovementTab = Win:Tab("Movement", "user")
-
-local MoveSec = MovementTab:Section("Movement", "Left")
-
-MoveSec:Toggle("Bunny Hop", false, function(Bool)
-	Flags.BHop = Bool
-end)
--- end of movement
 
 -- misc
 local MiscTab = Win:Tab("Misc", "code")
@@ -1594,9 +1585,9 @@ do
 
 	local EspCache = {}
 	local EspCacheLastUpdate = 0
-	local ESP_CACHE_INTERVAL = 2
 	local EspDrawLastUpdate = 0
-	local ESP_DRAW_INTERVAL = 0.015
+	local ESP_CACHE_INTERVAL = 1
+	local ESP_DRAW_INTERVAL = 0.005
 
 	local function RebuildEspCache()
 		local NewCache = {}
