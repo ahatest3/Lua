@@ -1669,6 +1669,7 @@ end)
 		end
 		
 		for _, E in tcCache do
+			print(E)
 			table.insert(AllEntries, E)
 		end
 
