@@ -1252,6 +1252,18 @@ do
 	end)
 end
 
+do
+	RunService.Heartbeat:Connect(function()
+		local Char = LocalPlayer.Character
+		local Humanoid = Char and Char:FindFirstChild("Humanoid")
+
+		local InAir = Humanoid and memory_read("int", Humanoid.Address + Offsets.Humanoid.FloorMaterial) == 1792 or false
+
+		
+	end)
+end
+
+do
 	local EspPool = {}
 
 	local function GetOrCreateEspLabel(Index)
