@@ -559,7 +559,7 @@ Win:SetTheme({
 Win:AddSettingsTab("cog")
 
 -- combat
-local CombatTab = Win:Tab("Combat", "crosshair")
+local CombatTab = Win:Tab("Gun Settings", "crosshair")
 
 --[[local AimbotSec = CombatTab:Section("Aimbot", "Left")
 
@@ -612,7 +612,7 @@ SnaplineToggle:AddColorpicker("Snapline Color", Color3.fromRGB(255, 255, 255), f
 	Flags.SnaplineAlpha = A
 end)--]]
 
-local GunModsSec = CombatTab:Section("Gun Mods", "Right")
+local GunModsSec = CombatTab:Section("Gun Mods", "Left")
 
 GunModsSec:Toggle("No Recoil", false, function(Bool)
 	if Bool then
@@ -1625,11 +1625,11 @@ do
 				table.insert(NewCache, E)
 			end
 		end
-		--[[if Flags.TcEsp then
+		if Flags.TcEsp then
 			for _, E in GetTcEntries() do
 				table.insert(NewCache, E)
 			end
-		end--]]
+		end
 		EspCache = NewCache
 	end
 
