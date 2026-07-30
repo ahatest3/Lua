@@ -15,6 +15,7 @@ Flags.NodeEspDistance = 500
 Flags.MiniEspDistance = 500
 Flags.PlantEspDistance = 500
 Flags.RaidEspDistance = 2000
+Flags.TcEspDistance = 500
 Flags.FovColor = Color3.fromRGB(255, 255, 255)
 Flags.FovAlpha = 1
 Flags.SnaplineColor = Color3.fromRGB(255, 255, 255)
@@ -1474,6 +1475,43 @@ do
 	end
 	
 
+	local function GetTcEntries()
+		local Entries = {}
+		local Bases = Workspace:FindFirstChild("Bases")
+
+		if not Bases then
+			return Entries
+		end
+
+		for _, Base in Bases:GetChildren() do
+			if not Base:IsA("Folder") then
+				continue
+			end
+
+			for _, Tc in Base:GetChildren() do
+				if not Tc:IsA("Model") or Tc.Name ~= "Base Cabinet" then
+					continue
+				end
+
+				local BasePart = Tc.PrimaryPart or Tc:FindFirstChildWhichIsA("BasePart")
+
+				if not BasePart then
+					continue
+				end
+
+				table.insert(Entries, {
+					Position = BasePart.Position + Vector3.new(0, 1, 0),
+					Text = "Minicopter",
+					Color = Flags.TcColor,
+					Alpha = Flags.TcColor,
+					MaxDistance = Flags.TcEspDistance,
+				})
+			end
+		end
+
+		return Entries
+	end
+
 	local RaidCache = {}
 	local RAID_EXPIRE_TIME = 30
 
@@ -1573,6 +1611,11 @@ do
 		end
 		if Flags.MiniEsp then
 			for _, E in GetMiniEntries() do
+				table.insert(NewCache, E)
+			end
+		end
+		if Flags.TcEsp then
+			for _, E in GetTcEntries() do
 				table.insert(NewCache, E)
 			end
 		end
