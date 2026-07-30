@@ -1623,6 +1623,7 @@ do
 
 			if HRP then
 				for _, E in GetTcEntries() do
+					task.wait()
 					if (HRP.Position - E.Position).Magnitude < Flags.TcEspDistance then
 						table.insert(tcCache, E)
 					end
