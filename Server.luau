@@ -1586,8 +1586,8 @@ do
 	local EspCache = {}
 	local EspCacheLastUpdate = 0
 	local EspDrawLastUpdate = 0
-	local ESP_CACHE_INTERVAL = 1
-	local ESP_DRAW_INTERVAL = 0.005
+	local ESP_CACHE_INTERVAL = 0
+	local ESP_DRAW_INTERVAL = 0
 
 	local function RebuildEspCache()
 		local NewCache = {}
