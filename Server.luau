@@ -758,6 +758,7 @@ NodeSec:Slider("Node Distance", 500, 50, 100, 1500, "m", function(v)
 end)
 local BaseSec = EspTab:Section("Base", "Left")
 
+
 local TcToggle = BaseSec:Toggle("Tool Cabinet ESP", false, function(Bool)
 	Flags.TcEsp = Bool
 end)
@@ -765,6 +766,10 @@ end)
 TcToggle:AddColorpicker("Tc Color", Color3.new(0.60, 0.83, 1), function(C,A)
 	Flags.TcColor = C
 	Flags.TcAlpha = A
+end)
+
+BaseSec:Slider("BaseDistance", 500, 50, 100, 1500, "m", function(v)
+	Flags.TcEspDistance = v
 end)
 
 local PlantSec = EspTab:Section("Plants", "Left")
