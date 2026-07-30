@@ -1471,7 +1471,7 @@ do
 		return Entries
 	end
 	
-	local function GetTcEntries()
+	local function GetBaseEntries()
 		local Entries = {}
 		local Bases = Workspace:FindFirstChild("Bases")
 
@@ -1586,8 +1586,11 @@ do
 	local EspCache = {}
 	local EspCacheLastUpdate = 0
 	local EspDrawLastUpdate = 0
-	local ESP_CACHE_INTERVAL = 0
-	local ESP_DRAW_INTERVAL = 0
+	local ESP_CACHE_INTERVAL = 2
+	local ESP_DRAW_INTERVAL = 0.0015
+	
+	local lastTcUpdate = 0
+	
 
 	local function RebuildEspCache()
 		local NewCache = {}
@@ -1616,13 +1619,11 @@ do
 				table.insert(NewCache, E)
 			end
 		end
-		if Flags.TcEsp then
-			for _, E in GetTcEntries() do
-				table.insert(NewCache, E)
-			end
-		end
+		
 		EspCache = NewCache
 	end
+
+
 
 	RunService.RenderStepped:Connect(function()
 		local Now = tick()
@@ -1665,6 +1666,12 @@ do
 		end
 		if Flags.RaidEsp then
 			for _, E in GetRaidEntries() do
+				table.insert(AllEntries, E)
+			end
+		end
+		if Flags.TcEsp and Now - lastTcUpdate >= 2 then
+			lastTcUpdate = tick()
+			for _, E in GetBaseEntries() do
 				table.insert(AllEntries, E)
 			end
 		end
