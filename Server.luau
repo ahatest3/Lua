@@ -1625,6 +1625,7 @@ RunService.RenderStepped:Connect(function()
 		for _, E in GetTcEntries() do
 			if (HRP.Position - E.Position).Magnitude < Flags.TcEspDistance then
 			table.insert(tcCache, E)
+			end
 		end
 end)
 
