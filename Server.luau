@@ -1275,6 +1275,10 @@
 			end
 		end
 
+local dropExcludes = {
+"Boulder",
+
+}
 		local function GetDropEntries()
 			local Entries = {}
 			local Drops = workspace:FindFirstChild("Drops")
@@ -1282,7 +1286,7 @@
 				return Entries
 			end
 			for _, Item in Drops:GetChildren() do
-				if not Item:IsA("Model") then
+				if not Item:IsA("Model") or table.find(dropExcludes, Item.Name) then
 					continue
 				end
 				local Root = Item.PrimaryPart or Item:FindFirstChildWhichIsA("BasePart")
