@@ -75,6 +75,19 @@ Flags.SoldierAlpha = 1
 Flags.SoldierColor = Color3.fromRGB(135, 255, 43)
 Flags.SoldierEspDistance = 500
 
+Flags.RecyclerAlpha = 1
+Flags.RecyclerColor = Color3.fromRGB(239, 255, 66)
+Flags.RecyclerEspDistance = 500
+
+Flags.FuseAlpha = 1
+Flags.FuseColor = Color3.fromRGB(65, 214, 255)
+Flags.FuseEspDistance = 500
+
+Flags.PowerAlpha = 1
+Flags.PowerColor = Color3.fromRGB(255, 170, 0)
+Flags.PowerEspDistance = 500
+
+
 
 local BulletInfo = {
 	["Pumpkin Launcher"] = { Speed = 80, Gravity = 0.16 },
@@ -186,7 +199,7 @@ end
 
 local Offsets = LoadOffsets()
 if not Offsets then
-	warn("Failed to load offsets.")
+	--warn("Failed to load offsets.")
 end
 
 local Cache =
@@ -682,6 +695,34 @@ SoldierToggle:AddColorpicker("Soldier Color", Flags.SoldierColor, function(C,A)
 	Flags.SoldierAlpha = A
 end)
 
+
+local RecyclerToggle = MonumentSec:Toggle("Recycler", false, function(Bool)
+	Flags.RecyclerEsp = Bool
+end)
+
+RecyclerToggle:AddColorpicker("Recycler Color", Flags.RecyclerColor, function(C,A)
+	Flags.RecyclerColor = C
+	Flags.RecyclerAlpha = A
+end)
+
+local FuseToggle = MonumentSec:Toggle("Fuse Box", false, function(Bool)
+	Flags.FuseEsp = Bool
+end)
+
+FuseToggle:AddColorpicker("Fuse Box Color", Flags.FuseColor, function(C,A)
+	Flags.FuseColor = C
+	Flags.FuseAlpha = A
+end)
+
+local PowerToggle = MonumentSec:Toggle("Power Button", false, function(Bool)
+	Flags.PowerEsp = Bool
+end)
+
+PowerToggle:AddColorpicker("Power Button Color", Flags.PowerColor, function(C,A)
+	Flags.PowerColor = C
+	Flags.PowerAlpha = A
+end)
+
 local TrashToggle = MonumentSec:Toggle("Trash Can", false, function(Bool)
 	Flags.TrashEsp = Bool
 end)
@@ -817,7 +858,7 @@ BaseSec:Slider("Distance", 200, 25, 50, 1000, "m", function(v)
 	Flags.TcEspDistance = v
 end)
 
-local PlantSec = EspTab:Section("Plants", "Left")
+local PlantSec = EspTab:Section("Plants", "Right")
 
 local WoolToggle = PlantSec:Toggle("Wool ESP", false, function(Bool)
 	Flags.WoolEsp = Bool
@@ -1459,6 +1500,33 @@ do
 		end
 		return Entries
 	end
+	
+	local function GetRecyclerEntries()
+		local Entries = {}
+		local Shredders = Workspace.Bases.Loners:FindFirstChild("Shredder")
+		if not Shredders then
+			return Entries
+		end
+		for _, Shredder in Shredders:GetChildren() do
+			if not Shredder:IsA("Model") then
+				continue
+			end
+			
+			local BasePart = Shredder.PrimaryPart or Shredder:FindFirstChildWhichIsA("BasePart")
+			if not BasePart then
+				continue
+			end
+	
+			table.insert(Entries, {
+				Position = BasePart.Position + Vector3.new(0, 1, 0),
+				Text = "Recycler",
+				Color = Flags.RecyclerColor,
+				Alpha = Flags.RecyclerAlpha,
+				MaxDistance = Flags.RecyclerEspDistance,
+			})
+		end
+		return Entries
+	end
 
 	local function GetNodeEntries()
 		local Entries = {}
@@ -1579,9 +1647,60 @@ do
 		return Entries
 	end
 	
+	
+	local function GetFuseEntries()
+		local Entries = {}
+		local Cells = Workspace.Bases.Loners:FindFirstChild("Power Cell Box")
+		if not Cells then
+			return Entries
+		end
+		for _, Fuse in Cells:GetChildren() do
+			if not Fuse:IsA("Model") then
+				continue
+			end
+			local BasePart = Fuse.PrimaryPart or Fuse:FindFirstChildWhichIsA("BasePart")
+			if not BasePart then
+				continue
+			end
+			table.insert(Entries, {
+				Position = BasePart.Position + Vector3.new(0, 1, 0),
+				Text = "Fuse Box",
+				Color = Flags.FuseColor,
+				Alpha = Flags.FuseAlpha,
+				MaxDistance = Flags.FuseEspDistance,
+			})
+		end
+		return Entries
+	end
+	
+
+	local function GetPowerEntries()
+		local Entries = {}
+		local Cells = Workspace.Bases.Loners:FindFirstChild("Power Button")
+		if not Cells then
+			return Entries
+		end
+		for _, Fuse in Cells:GetChildren() do
+			if not Fuse:IsA("Model") then
+				continue
+			end
+			local BasePart = Fuse.PrimaryPart or Fuse:FindFirstChildWhichIsA("BasePart")
+			if not BasePart then
+				continue
+			end
+			table.insert(Entries, {
+				Position = BasePart.Position + Vector3.new(0, 1, 0),
+				Text = "Power Button",
+				Color = Flags.PowerColor,
+				Alpha = Flags.PowerAlpha,
+				MaxDistance = Flags.PowerEspDistance,
+			})
+		end
+		return Entries
+	end
+	
 
 	local function GetNpcEntries()
-		print("Running Npc Entires")
 		local Entries = {}
 		local Military = Workspace:FindFirstChild("Military")
 		if not Military then
@@ -1845,6 +1964,23 @@ end
 			end
 		end
 		
+		if Flags.RecyclerEsp then
+			for _, E in GetRecyclerEntries() do
+				table.insert(NewCache, E)
+				end
+		end
+		
+		if Flags.FuseEsp then
+			for _, E in GetFuseEntries() do
+				table.insert(NewCache, E)
+				end
+		end
+		if Flags.PowerEsp then
+			for _, E in GetPowerEntries() do
+				table.insert(NewCache, E)
+			end
+		end
+		
 		EspCache = NewCache
 	end
 
@@ -1918,6 +2054,9 @@ local lastTcCached = 0
 			or Flags.OilEsp
 			or Flags.TrashEsp
 			or Flags.SoldierEsp
+			or Flags.RecyclerEsp
+			or Flags.FuseEsp
+			or Flags.PowerEsp
 
 		if not AnyEnabled then
 			HideAllEspLabels()
