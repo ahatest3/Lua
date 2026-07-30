@@ -1476,6 +1476,7 @@ do
 	
 
 	local function GetTcEntries()
+		print("Garnering Tc Entries")
 		local Entries = {}
 		local Bases = Workspace:FindFirstChild("Bases")
 
@@ -1498,7 +1499,7 @@ do
 				if not BasePart then
 					continue
 				end
-
+			print("Tc Found")
 				table.insert(Entries, {
 					Position = BasePart.Position + Vector3.new(0, 1, 0),
 					Text = "Minicopter",
