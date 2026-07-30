@@ -759,9 +759,15 @@ NodeSec:Slider("Node Distance", 500, 50, 100, 1500, "m", function(v)
 end)
 local BaseSec = EspTab:Section("Base", "Left")
 
+local alreadyCachedTc = false
+local readyToBaseCache = true
 
 local TcToggle = BaseSec:Toggle("Base Cabinet ESP", false, function(Bool)
 	Flags.TcEsp = Bool
+	readyToBaseCache = Bool
+	if Bool == false then
+		alreadyCachedTc = false
+	end
 end)
 
 TcToggle:AddColorpicker("Base Cabinet Color", Color3.new(0.6, 0.831373, 1), function(C,A)
@@ -769,7 +775,7 @@ TcToggle:AddColorpicker("Base Cabinet Color", Color3.new(0.6, 0.831373, 1), func
 	Flags.TcAlpha = A
 end)
 
-BaseSec:Slider("Distance", 500, 50, 100, 1500, "m", function(v)
+BaseSec:Slider("Distance", 500, 50, 100, 1000, "m", function(v)
 	Flags.TcEspDistance = v
 end)
 
@@ -1458,48 +1464,44 @@ do
 		return Entries
 	end
 	
-	local function GetTcEntries()
-		local Entries = {}
+	local cabinetParts = {}
+	local canBuildTc = true
+	
+
+
+	local function BuildTcCache()
+		print("BUILDING TC CACHES")
+		cabinetParts = {}
+	canBuildTc = false
 		local Bases = Workspace:FindFirstChild("Bases")
-
 		if not Bases then
-			return Entries
+			return
 		end
 
-		for _, Base in Bases:GetChildren() do
-			if not Base:IsA("Folder") then
-				continue
-			end
+		local Count = 0
 
-			for _, Tc in Base:GetChildren() do
-				if not Tc:IsA("Folder") or Tc.Name ~= "Base Cabinet" then
-					continue
-				end
+		for _, Base in ipairs(Bases:GetChildren()) do
+			if not Base:IsA("Folder") then continue end
+				for _, Tc in ipairs(Base:GetChildren()) do
+					if not Tc:IsA("Folder") or Tc.Name ~= "Base Cabinet" then continue end
+					for _, ToolCabinet in ipairs(Tc:GetChildren()) do
+						if not ToolCabinet:IsA("Model") then continue end
+						local BasePart = ToolCabinet.PrimaryPart or ToolCabinet:FindFirstChildWhichIsA("BasePart")
 
-				for _, ToolCabinet in Tc:GetChildren() do
-					if not ToolCabinet:IsA("Model") then
-						continue
+						if BasePart and not cabinetParts[BasePart] then
+							table.insert(cabinetParts, BasePart)
+						end
 					end
 
-					local BasePart = ToolCabinet.PrimaryPart or ToolCabinet:FindFirstChildWhichIsA("BasePart")
-
-					if not BasePart then
-						continue
-					end
-
-					table.insert(Entries, {
-						Position = BasePart.Position + Vector3.new(0, 1, 0),
-						Text = "Base Cabinet",
-						Color = Flags.TcColor,
-						Alpha = Flags.TcAlpha,
-						MaxDistance = Flags.TcEspDistance,
-					})
-				end
+					Count += 1
 			end
 		end
-
-		return Entries
+		canBuildTc = true
+		print("FOUND "..Count.." BASE CABINETS")
 	end
+	
+
+
 
 	local RaidCache = {}
 	local RAID_EXPIRE_TIME = 30
@@ -1576,7 +1578,6 @@ do
 	local ESP_CACHE_INTERVAL = 2
 	local ESP_DRAW_INTERVAL = 0.001
 	
-
 	local function RebuildEspCache()
 		local NewCache = {}
 		if Flags.DropsEsp then
@@ -1610,33 +1611,54 @@ do
 
 	local tcCache = {}
 	local lastTcUpdate = 0
+	
+	RunService.RenderStepped:Connect(function()		
+		if not Flags.TcEsp then
+			table.clear(tcCache)
+			return
+		end
 
-	RunService.RenderStepped:Connect(function()
 		local now = tick()
+		if now - lastTcUpdate < ESP_CACHE_INTERVAL then
+			return
+		end
+		lastTcUpdate = now
+		
+		if readyToBaseCache and not alreadyCachedTc then
+			BuildTcCache()
+			alreadyCachedTc = true
+		end
+		
+		
+		table.clear(tcCache)
 
-		if now - lastTcUpdate >= 4 and Flags.TcEsp then
-			lastTcUpdate = now
-			tcCache = {}
+		for i = #cabinetParts, 1, -1 do
+			local cabinet = cabinetParts[i]
 
-			local char = LocalPlayer.Character
-			local HRP = char and char:FindFirstChild("HumanoidRootPart")
-
-			if HRP then
-				for _, E in GetTcEntries() do
-					task.wait()
-					if (HRP.Position - E.Position).Magnitude < Flags.TcEspDistance then
-						table.insert(tcCache, E)
-					end
-				end
+			if not cabinet or not cabinet.Parent or not cabinet.Position then
+				continue
+			else
+					table.insert(tcCache, {
+					Position = cabinet.Position,
+						Text = "Base Cabinet",
+						Color = Flags.TcColor,
+						Alpha = Flags.TcAlpha,
+						MaxDistance = Flags.TcEspDistance,
+					})
 			end
 		end
 	end)
 
+local lastTcCached = 0
 
 	RunService.RenderStepped:Connect(function()
 		local Now = tick()
 		local Char = LocalPlayer.Character
 		local Root = Char and Char:FindFirstChild("HumanoidRootPart")
+		if not Root then
+			HideAllEspLabels()
+			return
+		end
 
 		local AnyEnabled = 
 			Flags.DropsEsp
@@ -1679,7 +1701,7 @@ do
 		end
 		
 		for _, E in tcCache do
-			print(E)
+			--print((E.Position - Root.Position).Magnitude)
 			table.insert(AllEntries, E)
 		end
 
