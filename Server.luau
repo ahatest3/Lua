@@ -844,15 +844,7 @@ MiscEspSec:Slider("Raid Distance", 2000, 100, 500, 5000, "m", function(v)
 end)
 -- end of misc esp
 
--- movement
-local MovementTab = Win:Tab("Movement", "user")
 
-local MoveSec = MovementTab:Section("Movement", "Left")
-
-MoveSec:Toggle("Bunny Hop", false, function(Bool)
-	Flags.BHop = Bool
-end)
--- end of movement
 
 -- misc
 local MiscTab = Win:Tab("Misc", "code")
@@ -1260,20 +1252,6 @@ do
 	end)
 end
 
-do
-	RunService.Heartbeat:Connect(function()
-		local Char = LocalPlayer.Character
-		local Humanoid = Char and Char:FindFirstChild("Humanoid")
-
-		local InAir = Humanoid and memory_read("int", Humanoid.Address + Offsets.Humanoid.FloorMaterial) == 1792 or false
-
-		if Flags.BHop and not InAir and iskeypressed(32) and isrbxactive() then
-			memory_write("byte", Humanoid.Address + Offsets.Humanoid.Jump, 1)
-		end
-	end)
-end
-
-do
 	local EspPool = {}
 
 	local function GetOrCreateEspLabel(Index)
@@ -1480,7 +1458,7 @@ do
 		return Entries
 	end
 	
-	local function GetTcEntries()
+	local function GetBaseEntries()
 		local Entries = {}
 		local Bases = Workspace:FindFirstChild("Bases")
 
@@ -1596,7 +1574,7 @@ do
 	local EspCacheLastUpdate = 0
 	local ESP_CACHE_INTERVAL = 2
 	local EspDrawLastUpdate = 0
-	local ESP_DRAW_INTERVAL = 0.015
+	local ESP_DRAW_INTERVAL = 0.01
 
 	local function RebuildEspCache()
 		local NewCache = {}
@@ -1625,11 +1603,11 @@ do
 				table.insert(NewCache, E)
 			end
 		end
-		--[[if Flags.TcEsp then
-			for _, E in GetTcEntries() do
+		if Flags.TcEsp then
+			for _, E in GetBaseEntries() do
 				table.insert(NewCache, E)
 			end
-		end--]]
+		end
 		EspCache = NewCache
 	end
 
