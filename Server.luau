@@ -684,7 +684,7 @@ end)
 -- esp
 local EspTab = Win:Tab("ESP", "eye")
 
-local PlayerVisSec = EspTab:Section("Player", "Left")
+--[[local PlayerVisSec = EspTab:Section("Player", "Left")
 
 PlayerVisSec:Toggle("Armor Viewer", false, function(Bool)
 	Flags.ArmorViewer = Bool
@@ -697,7 +697,7 @@ end):Tooltip("Detects unusual velocities and new accounts.")
 CheaterDetectorToggle:AddColorpicker("Cheater Detector Color", Color3.fromRGB(255, 13, 13), function(C, A)
 	Flags.CheaterDetectorColor = C
 	Flags.CheaterDetectorAlpha = A
-end)
+end)--]]
 -- end of esp
 
 -- misc esp
@@ -760,11 +760,11 @@ end)
 local BaseSec = EspTab:Section("Base", "Left")
 
 
-local TcToggle = BaseSec:Toggle("Tool Cabinet ESP", false, function(Bool)
+local TcToggle = BaseSec:Toggle("Base Cabinet ESP", false, function(Bool)
 	Flags.TcEsp = Bool
 end)
 
-TcToggle:AddColorpicker("Tc Color", Color3.new(0.6, 0.831373, 1), function(C,A)
+TcToggle:AddColorpicker("Base Cabinet Color", Color3.new(0.6, 0.831373, 1), function(C,A)
 	Flags.TcColor = C
 	Flags.TcAlpha = A
 end)
@@ -1458,7 +1458,7 @@ do
 		return Entries
 	end
 	
-	local function GetBaseEntries()
+	local function GetTcEntries()
 		local Entries = {}
 		local Bases = Workspace:FindFirstChild("Bases")
 
@@ -1574,7 +1574,7 @@ do
 	local EspCacheLastUpdate = 0
 	local EspDrawLastUpdate = 0
 	local ESP_CACHE_INTERVAL = 2
-	local ESP_DRAW_INTERVAL = 0.0015
+	local ESP_DRAW_INTERVAL = 0.001
 	
 
 	local function RebuildEspCache()
@@ -1608,6 +1608,20 @@ do
 		EspCache = NewCache
 	end
 
+local tcCache = {}
+local lastTcUpdate = 0
+
+RunService.RenderStepped:Connect(function()
+	if not Flags.TcEsp then return end
+	local now = tick()
+	if now - lastTcUpdate >= 4 then
+		return
+	end
+	
+		for _, E in GetTcEntries() do
+			table.insert(tcCache, E)
+		end
+end)
 
 
 	RunService.RenderStepped:Connect(function()
@@ -1654,10 +1668,9 @@ do
 				table.insert(AllEntries, E)
 			end
 		end
-		if Flags.TcEsp then
-			for _, E in GetBaseEntries() do
-				table.insert(AllEntries, E)
-			end
+		
+		for _, E in tcCache do
+			table.insert(AllEntries, E)
 		end
 
 		local LabelIndex = 0
