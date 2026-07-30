@@ -768,7 +768,7 @@ TcToggle:AddColorpicker("Tc Color", Color3.new(0.60, 0.83, 1), function(C,A)
 	Flags.TcAlpha = A
 end)
 
-BaseSec:Slider("BaseDistance", 500, 50, 100, 1500, "m", function(v)
+BaseSec:Slider("Distance", 500, 50, 100, 1500, "m", function(v)
 	Flags.TcEspDistance = v
 end)
 
@@ -1479,7 +1479,6 @@ do
 		return Entries
 	end
 	
-
 	local function GetTcEntries()
 		local Entries = {}
 		local Bases = Workspace:FindFirstChild("Bases")
@@ -1497,25 +1496,25 @@ do
 				if not Tc:IsA("Folder") or Tc.Name ~= "Base Cabinet" then
 					continue
 				end
-				
+
 				for _, ToolCabinet in Tc:GetChildren() do
 					if not ToolCabinet:IsA("Model") then
 						continue
-				end
+					end
 
-				local BasePart = ToolCabinet.PrimaryPart or ToolCabinet:FindFirstChildWhichIsA("BasePart")
+					local BasePart = ToolCabinet.PrimaryPart or ToolCabinet:FindFirstChildWhichIsA("BasePart")
 
-				if not BasePart then
-					continue
-				end
-			print("Tc Found")
-				table.insert(Entries, {
-					Position = BasePart.Position + Vector3.new(0, 1, 0),
-					Text = "Minicopter",
-					Color = Flags.TcColor,
-					Alpha = Flags.TcColor,
-					MaxDistance = Flags.TcEspDistance,
-				})
+					if not BasePart then
+						continue
+					end
+
+					table.insert(Entries, {
+						Position = BasePart.Position + Vector3.new(0, 1, 0),
+						Text = "Base Cabinet",
+						Color = Flags.TcColor,
+						Alpha = Flags.TcAlpha,
+						MaxDistance = Flags.TcEspDistance,
+					})
 				end
 			end
 		end
@@ -1638,7 +1637,8 @@ do
 		local Char = LocalPlayer.Character
 		local Root = Char and Char:FindFirstChild("HumanoidRootPart")
 
-		local AnyEnabled = Flags.DropsEsp
+		local AnyEnabled = 
+			Flags.DropsEsp
 			or Flags.BodybagEsp
 			or Flags.StoneEsp
 			or Flags.MetalEsp
