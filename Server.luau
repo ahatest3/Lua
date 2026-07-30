@@ -1259,7 +1259,9 @@ do
 
 		local InAir = Humanoid and memory_read("int", Humanoid.Address + Offsets.Humanoid.FloorMaterial) == 1792 or false
 
-		
+		if Flags.BHop and not InAir and iskeypressed(32) and isrbxactive() then
+			memory_write("byte", Humanoid.Address + Offsets.Humanoid.Jump, 1)
+		end
 	end)
 end
 
