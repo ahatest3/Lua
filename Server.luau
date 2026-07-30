@@ -1635,7 +1635,7 @@ do
 		for i = #cabinetParts, 1, -1 do
 			local cabinet = cabinetParts[i]
 
-			if not cabinet or not cabinet.Parent or not cabinet.Position then
+			if not cabinet then
 				continue
 			else
 					table.insert(tcCache, {
