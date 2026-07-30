@@ -1619,7 +1619,11 @@ RunService.RenderStepped:Connect(function()
 	end
 		if not Flags.TcEsp then return end
 		tcCache = {}
+		local char = LocalPlayer.Character
+		local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+		local HRP = char and char:FindFirstChild("HumanoidRootPart")
 		for _, E in GetTcEntries() do
+			if (HRP.Position - E.Position).Magnitude < Flags.TcEspDistance then
 			table.insert(tcCache, E)
 		end
 end)
@@ -1671,7 +1675,7 @@ end)
 		end
 		
 		for _, E in tcCache do
-			print(E)
+			
 			table.insert(AllEntries, E)
 		end
 
