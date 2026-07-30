@@ -1589,8 +1589,6 @@ do
 	local ESP_CACHE_INTERVAL = 2
 	local ESP_DRAW_INTERVAL = 0.0015
 	
-	local lastTcUpdate = 0
-	
 
 	local function RebuildEspCache()
 		local NewCache = {}
@@ -1669,8 +1667,7 @@ do
 				table.insert(AllEntries, E)
 			end
 		end
-		if Flags.TcEsp and Now - lastTcUpdate >= 2 then
-			lastTcUpdate = tick()
+		if Flags.TcEsp then
 			for _, E in GetBaseEntries() do
 				table.insert(AllEntries, E)
 			end
@@ -1703,7 +1700,7 @@ do
 	end)
 end
 
-do
+
 	local ModCheckerLastCheck = 0
 	local MOD_CHECKER_INTERVAL = 3
 	local SeenMods = {}
@@ -1721,7 +1718,7 @@ do
 						return memory_read("uintptr_t", Player.Address + Offsets.Player.UserId)
 					end)
 					if not Success then
-						warn("fuck failed to load userid for mod checker")
+						warn("failed to load userid for mod checker")
 					end
 					if not ModeratorIDs[UserId] or SeenMods[UserId] then
 						continue
@@ -1734,10 +1731,10 @@ do
 						)
 						SeenMods[UserId] = true
 					elseif Flags.ModCheckerBehavior == "Kick" then
-						memory_write("string", game.Workspace.Address, "BLAH")
+						memory_write("string", game.Workspace.Address, "Kick")
 					end
 				end
 			end
 		end
 	end)
-end
+
