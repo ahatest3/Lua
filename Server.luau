@@ -1476,7 +1476,6 @@ do
 	
 
 	local function GetTcEntries()
-		print("Garnering Tc Entries")
 		local Entries = {}
 		local Bases = Workspace:FindFirstChild("Bases")
 
@@ -1490,11 +1489,16 @@ do
 			end
 
 			for _, Tc in Base:GetChildren() do
-				if not Tc:IsA("Model") or Tc.Name ~= "Base Cabinet" then
+				if not Tc:IsA("Folder") or Tc.Name ~= "Base Cabinet" then
 					continue
 				end
+				
+				for _, ToolCabinet in Tc:GetChildren() do
+					if not ToolCabinet:IsA("Model") then
+						continue
+				end
 
-				local BasePart = Tc.PrimaryPart or Tc:FindFirstChildWhichIsA("BasePart")
+				local BasePart = ToolCabinet.PrimaryPart or ToolCabinet:FindFirstChildWhichIsA("BasePart")
 
 				if not BasePart then
 					continue
@@ -1507,6 +1511,7 @@ do
 					Alpha = Flags.TcColor,
 					MaxDistance = Flags.TcEspDistance,
 				})
+				end
 			end
 		end
 
