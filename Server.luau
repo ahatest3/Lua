@@ -1610,6 +1610,7 @@ do
 
 local tcCache = {}
 local lastTcUpdate = 0
+local lastTcCache = 0
 
 RunService.RenderStepped:Connect(function()
 	local now = tick()
@@ -1617,6 +1618,7 @@ RunService.RenderStepped:Connect(function()
 		return
 	end
 		if not Flags.TcEsp then return end
+		tcCache = {}
 		for _, E in GetTcEntries() do
 			table.insert(tcCache, E)
 		end
