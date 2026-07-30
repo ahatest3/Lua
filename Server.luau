@@ -1251,18 +1251,12 @@ do
 	end)
 end
 
-do
+
 	RunService.Heartbeat:Connect(function()
 		local Char = LocalPlayer.Character
 		local Humanoid = Char and Char:FindFirstChild("Humanoid")
-
-		local InAir = Humanoid and memory_read("int", Humanoid.Address + Offsets.Humanoid.FloorMaterial) == 1792 or false
-
-		if Flags.BHop and not InAir and iskeypressed(32) and isrbxactive() then
-			memory_write("byte", Humanoid.Address + Offsets.Humanoid.Jump, 1)
-		end
 	end)
-end
+
 
 do
 	local EspPool = {}
