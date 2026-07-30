@@ -51,6 +51,29 @@ Flags.TcAlpha = 1
 Flags.TcColor = Color3.new(0.60, 0.83, 1)
 Flags.TcEspDistance = 200
 
+Flags.SteelAlpha = 1
+Flags.SteelColor = Color3.new(0.133333, 0.133333, 0.133333)
+Flags.SteelEspDistance = 500
+
+Flags.WoodenAlpha = 1
+Flags.WoodenColor = Color3.new(0.666667, 0.333333, 0)
+Flags.WoodenEspDistance = 500
+
+Flags.MetalCrateAlpha = 1
+Flags.MetalCrateColor = Color3.new(0.666667, 0, 1)
+Flags.MetalCrateEspDistance = 500
+
+Flags.TrashAlpha = 1
+Flags.TrashColor = Color3.new(0.760784, 0.760784, 0.760784)
+Flags.TrashEspDistance = 500
+
+Flags.OilAlpha = 1
+Flags.OilColor = Color3.fromRGB(255, 32, 36)
+Flags.OilEspDistance = 500
+
+Flags.SoldierAlpha = 1
+Flags.SoldierColor = Color3.fromRGB(135, 255, 43)
+Flags.SoldierEspDistance = 500
 
 
 local BulletInfo = {
@@ -537,29 +560,44 @@ local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/neaxusxgo
 	or INSui
 
 local Win = Lib:CreateWindow({
-	title = "Fuzzy's Resistance",
-	subtitle = "auto",
-	size = Vector2.new(800, 600),
-	menuKey = "rightshift",
-	configFolder = "fuzzysresistance",
-	configName = "default",
-	opacity = 1,
-	gameInput = false,
-	autoSave = true,
-	startOpen = true,
+	title       = "FUZZY'S",
+	subtitle    = "Fallen Survival Cheat",                   -- under the title; or "auto" to use the game's name
+	size        = Vector2.new(1000, 800),
+	menuKey     = "rightshift",                    -- open/close key, default "p"
+	configName  = "myhub",                -- default config name
+	configFolder= "myhub",                -- override the auto config-folder name
+	accent      = Color3.fromRGB(255,255,255),          -- accent colour (sets both A and B)
+	accentA     = Color3.fromRGB(122,134,255),          -- or the two accents separately
+	accentB     = Color3.fromRGB(189,130,255),
+	theme       = { accent = Color3.fromRGB(255,120,160) },  -- same via a theme table (accent / accentA / accentB / bg / text ...)
+	font        = "Proxima",              -- initial font: a name, or a raw Drawing.Fonts.X value
+	backgroundEffect      = "Off",       -- "Snow" / "Matrix" / "Rain" / "Off"
+	backgroundEffectColor = Color3.fromRGB(160,90,255),  -- recolour the particles
+	logo        = "https://.../logo.png", -- header logo (url, path, or raw PNG/JPG bytes)
+	icon        = "https://.../icon.png", -- corner gem + minimized-bubble icon
+	opacity     = 1,                   -- 0.4..1 (or a percent like 95)
+	rounding    = 1,                      -- corner-radius scale, 0..2.5
+	rowLines    = true,                   -- thin separators between rows
+	checkboxStyle = true,                 -- draw every toggle as a filling checkbox instead of a switch
+	smartFps    = true,                   -- throttle redraws when idle
+	gameInput   = false,                  -- false (default): menu holds input while open. true: also pass to the game when the cursor is off the window. "always": never capture
+	autoSave    = true,                   -- auto-save the config as you change things
+	startOpen   = true,                   -- open immediately (default true)
+	keybindOverlay = true,                -- show the floating "keybinds" overlay (default on)
 })
 
+Win:SetPerformance(true)
+
 Win:SetTheme({
-	accentA = Color3.fromRGB(0, 217, 192),
-	accentB = Color3.fromRGB(0, 168, 232),
-	bg = Color3.fromRGB(6, 14, 20),
-	sidebar = Color3.fromRGB(10, 22, 30),
+	accentA = Color3.fromRGB(255, 255, 255),
+	accentB = Color3.fromRGB(77, 77, 77),
+	bg = Color3.fromRGB(0, 0, 0),
+	sidebar = Color3.fromRGB(71, 71, 71),
 })
 
 Win:AddSettingsTab("cog")
 
 -- combat
-local CombatTab = Win:Tab("Gun Settings", "crosshair")
 
 --[[local AimbotSec = CombatTab:Section("Aimbot", "Left")
 
@@ -612,75 +650,6 @@ SnaplineToggle:AddColorpicker("Snapline Color", Color3.fromRGB(255, 255, 255), f
 	Flags.SnaplineAlpha = A
 end)--]]
 
-local GunModsSec = CombatTab:Section("Gun Mods", "Left")
-
-GunModsSec:Toggle("No Recoil", false, function(Bool)
-	if Bool then
-		EnableNoRecoil()
-	else
-		DisableNoRecoil()
-	end
-end)
-
-GunModsSec:Toggle("Extend Range", false, function(Bool)
-	if Bool then
-		EnableExtendRange()
-	else
-		DisableExtendRange()
-	end
-end)
-
-GunModsSec:Toggle("Instant Bullet", false, function(Bool)
-	if Bool then
-		EnableInstantBullet()
-	else
-		DisableInstantBullet()
-	end
-end)
-
-GunModsSec:Toggle("No Spread", false, function(Bool)
-	if Bool then
-		EnableNoSpread()
-	else
-		DisableNoSpread()
-	end
-end)
-
-GunModsSec:Toggle("Fire Rate", false, function(Bool)
-	Flags.FireRate = Bool
-
-	if Bool then
-		ApplyFireRate(Flags.FireRateMult)
-	else
-		ApplyFireRate(1)
-	end
-end)
-
-GunModsSec:Slider("Fire Rate Multiplier", 1, 0.1, 1, 1.5, "x", function(V)
-	Flags.FireRateMult = V
-
-	if Flags.FireRate then
-		ApplyFireRate(V)
-	end
-end)
-
-GunModsSec:Toggle("No Sway", false, function(Bool)
-	if Bool then
-		EnableNoSway()
-	else
-		DisableNoSway()
-	end
-end)
-
-GunModsSec:Toggle("Thick Bullet", false, function(Bool)
-	Flags.ThickBullet = Bool
-end)
-
-GunModsSec:Slider("Thickness", 1, 0.1, 1, 4, "x", function(V)
-	Flags.BulletThickness = V
-end)
--- end of combat
-
 -- esp
 local EspTab = Win:Tab("ESP", "eye")
 
@@ -700,7 +669,76 @@ CheaterDetectorToggle:AddColorpicker("Cheater Detector Color", Color3.fromRGB(25
 end)--]]
 -- end of esp
 
--- misc esp
+-- Monument esp
+local MonumentSec = EspTab:Section("Monuments", "Left")
+
+
+local SoldierToggle = MonumentSec:Toggle("Soldier", false, function(Bool)
+	Flags.SoldierEsp = Bool
+end)
+
+SoldierToggle:AddColorpicker("Soldier Color", Flags.SoldierColor, function(C,A)
+	Flags.SoldierColor = C
+	Flags.SoldierAlpha = A
+end)
+
+local TrashToggle = MonumentSec:Toggle("Trash Can", false, function(Bool)
+	Flags.TrashEsp = Bool
+end)
+
+TrashToggle:AddColorpicker("Trash Can Color", Flags.TrashColor, function(C,A)
+	Flags.TrashColor = C
+	Flags.TrashAlpha = A
+end)
+
+local OilToggle = MonumentSec:Toggle("Oil Barrel", false, function(Bool)
+	Flags.OilEsp = Bool
+end)
+
+OilToggle:AddColorpicker("Oil Barrel Color", Flags.OilColor, function(C,A)
+	Flags.OilColor = C
+	Flags.OilAlpha = A
+end)
+
+local WoodenToggle = MonumentSec:Toggle("Wooden Crate", false, function(Bool)
+	Flags.WoodenEsp = Bool
+end)
+
+WoodenToggle:AddColorpicker("Wooden Crate Color", Flags.WoodenColor, function(C,A)
+	Flags.WoodenColor = C
+	Flags.WoodenAlpha = A
+end)
+
+local MetalCrateToggle = MonumentSec:Toggle("Metal Crate", false, function(Bool)
+	Flags.MetalCrateEsp = Bool
+end)
+
+MetalCrateToggle:AddColorpicker("Metal Crate Color", Flags.MetalCrateColor, function(C,A)
+	Flags.MetalCrateColor = C
+	Flags.MetalCrateAlpha = A
+end)
+
+
+local SteelToggle = MonumentSec:Toggle("Steel Crate", false, function(Bool)
+	Flags.SteelEsp = Bool
+end)
+
+SteelToggle:AddColorpicker("Steel Crate Color", Flags.SteelColor, function(C,A)
+	Flags.SteelColor = C
+	Flags.SteelAlpha = A
+end)
+
+	MonumentSec:Slider("Distance", 500, 50, 100, 1500, "m", function(v)
+		Flags.soldieres = v
+		Flags.TrashEspDistance = v
+		Flags.OilEspDistance = v
+		Flags.WoodenEspDistance = v
+		Flags.MetalCrateEspDistance = v
+		Flags.SteelEspDistance = v
+	end)
+
+
+--//End of monument esp
 local LootSec = EspTab:Section("Loot", "Left")
 
 local ItemsToggle = LootSec:Toggle("Dropped Items", false, function(Bool)
@@ -850,19 +888,94 @@ MiscEspSec:Slider("Raid Distance", 2000, 100, 500, 5000, "m", function(v)
 end)
 -- end of misc esp
 
+local CombatTab = Win:Tab("Fallen", "wrench")
 
--- misc
-local MiscTab = Win:Tab("Misc", "code")
 
-local ModCheckerSec = MiscTab:Section("Mod Checker", "Left")
+local GunModsSec = CombatTab:Section("Gun Mods", "Left")
 
-ModCheckerSec:Toggle("Mod Checker", false, function(Bool)
+GunModsSec:Toggle("No Recoil", false, function(Bool)
+	if Bool then
+		EnableNoRecoil()
+	else
+		DisableNoRecoil()
+	end
+end)
+
+GunModsSec:Toggle("Extend Range", false, function(Bool)
+	if Bool then
+		EnableExtendRange()
+	else
+		DisableExtendRange()
+	end
+end)
+
+
+GunModsSec:Toggle("Instant Bullet", false, function(Bool)
+	if Bool then
+		EnableInstantBullet()
+	else
+		DisableInstantBullet()
+	end
+end)
+
+GunModsSec:Toggle("No Spread", false, function(Bool)
+	if Bool then
+		EnableNoSpread()
+	else
+		DisableNoSpread()
+	end
+end)
+
+GunModsSec:Toggle("Fire Rate", false, function(Bool)
+	Flags.FireRate = Bool
+
+	if Bool then
+		ApplyFireRate(Flags.FireRateMult)
+	else
+		ApplyFireRate(1)
+	end
+end)
+
+GunModsSec:Slider("Fire Rate Multiplier", 1, 0.1, 1, 1.5, "x", function(V)
+	Flags.FireRateMult = V
+
+	if Flags.FireRate then
+		ApplyFireRate(V)
+	end
+end)
+
+GunModsSec:Toggle("No Sway", false, function(Bool)
+	if Bool then
+		EnableNoSway()
+	else
+		DisableNoSway()
+	end
+end)
+
+GunModsSec:Toggle("Thick Bullet", false, function(Bool)
+	Flags.ThickBullet = Bool
+end)
+
+GunModsSec:Slider("Thickness", 1, 0.1, 1, 4, "x", function(V)
+	Flags.BulletThickness = V
+end)
+
+local MiscSec = CombatTab:Section("Misc", "Right")
+
+MiscSec:Toggle("Mod Checker", false, function(Bool)
 	Flags.ModChecker = Bool
 end)
 
-ModCheckerSec:Dropdown("Mod Checker Behavior", { "Notify" }, { "Notify", "Kick" }, false, function(v)
+MiscSec:Dropdown("Mod Checker Behavior", { "Notify" }, { "Notify", "Kick" }, false, function(v)
 	Flags.ModCheckerBehavior = v[1]
 end):Tooltip("Kick Behavior will crash your Roblox!")
+-- end of combat
+
+
+-- misc
+--local MiscTab = Win:Tab("Misc", "code")
+
+
 -- end of misc
 -- end of ui
 
@@ -942,7 +1055,9 @@ do
 				end
 
 				Head.Size = HeadHitboxSize * Flags.BulletThickness
+				if Offsets.BasePart then
 				memory_write("float", Head.Address + Offsets.BasePart.Transparency, 0.99)
+				end
 			end
 		else
 			for _, Player in Players:GetPlayers() do
@@ -1283,7 +1398,7 @@ do
 
 	local dropExcludes = {
 		"Boulder",
-		"Nail",
+		"Nails",
 		"Wool Plant Seed",
 		"Wooden Arrow",
 		"Lighter",
@@ -1464,6 +1579,118 @@ do
 		return Entries
 	end
 	
+
+	local function GetNpcEntries()
+		print("Running Npc Entires")
+		local Entries = {}
+		local Military = Workspace:FindFirstChild("Military")
+		if not Military then
+			return Entries
+		end
+
+		for _, Monument in ipairs(Military:GetChildren()) do
+			if not Monument:IsA("Folder") then
+				continue
+			end
+
+			for _, Npc in ipairs(Monument:GetChildren()) do
+				if not Npc:IsA("Model") then
+					continue
+				end
+				local Name = Npc.Name
+
+				if not string.find(Name, "Soldier")
+					and not string.find(Name, "Boris")
+					and not string.find(Name, "Brutus")
+					and not string.find(Name, "Bruno")
+				then
+					continue
+				end
+				local BasePart = Npc.PrimaryPart or Npc:FindFirstChildWhichIsA("BasePart")
+				if not BasePart then
+					continue
+				end
+					table.insert(Entries, {
+						Position = BasePart.Position + Vector3.new(0, 1, 0),
+						Text = Npc.Name,
+						Color = Flags.SoldierColor,
+						Alpha = Flags.SoldierAlpha,
+						MaxDistance = Flags.SoldierEspDistance,
+					})
+				end
+			end
+		return Entries
+	end
+	
+	
+local function GetCrateEntries()
+	local Entries = {}
+	local Loners = Workspace:FindFirstChild("Bases"):FindFirstChild("Loners")
+	if not Loners then
+		return Entries
+	end
+
+	for _, Item in ipairs(Loners:GetChildren()) do
+		if not Item:IsA("Folder") then
+			continue
+		end
+
+		for _, Crate in ipairs(Item:GetChildren()) do
+			if not Crate:IsA("Model") then
+				continue
+			end
+				local BasePart = Crate.PrimaryPart or Crate:FindFirstChildWhichIsA("BasePart")
+				if not BasePart then
+					continue
+				end
+			if Flags.SteelEsp and string.find(Crate.Name, "Steel Crate") then
+					table.insert(Entries, {
+						Position = BasePart.Position + Vector3.new(0, 1, 0),
+						Text = "Steel Crate",
+						Color = Flags.SteelColor,
+						Alpha = Flags.SteelAlpha,
+						MaxDistance = Flags.SteelEspDistance,
+					})
+			elseif Flags.MetalCrateEsp and string.find(Crate.Name, "Metal Crate") then
+					table.insert(Entries, {
+						Position = BasePart.Position + Vector3.new(0, 1, 0),
+						Text = "Metal Crate",
+						Color = Flags.MetalCrateColor,
+						Alpha = Flags.MetalCrateAlpha,
+						MaxDistance = Flags.MetalCrateEspDistance,
+					})
+			elseif Flags.WoodenEsp and string.find(Crate.Name, "Wooden Crate") then
+					table.insert(Entries, {
+						Position = BasePart.Position + Vector3.new(0, 1, 0),
+						Text = "Wooden Crate",
+						Color = Flags.WoodenColor,
+						Alpha = Flags.WoodenAlpha,
+						MaxDistance = Flags.WoodenEspDistance,
+					})
+				elseif Flags.TrashEsp and string.find(Crate.Name, "Trash Can") then
+					table.insert(Entries, {
+						Position = BasePart.Position + Vector3.new(0, 1, 0),
+						Text = "Trash Can",
+						Color = Flags.TrashColor,
+						Alpha = Flags.TrashAlpha,
+						MaxDistance = Flags.TrashEspDistance,
+					})
+				elseif Flags.OilEsp and string.find(Crate.Name, "Oil Barrel") then
+					table.insert(Entries, {
+						Position = BasePart.Position + Vector3.new(0, 1, 0),
+						Text = "Oil Barrel",
+						Color = Flags.OilColor,
+						Alpha = Flags.OilAlpha,
+						MaxDistance = Flags.OilEspDistance,
+					})
+			else
+				continue
+			end
+		end
+	end
+	return Entries
+end
+
 	local cabinetParts = {}
 	local canBuildTc = true
 	
@@ -1578,6 +1805,7 @@ do
 	local ESP_CACHE_INTERVAL = 2
 	local ESP_DRAW_INTERVAL = 0.001
 	
+	
 	local function RebuildEspCache()
 		local NewCache = {}
 		if Flags.DropsEsp then
@@ -1602,6 +1830,17 @@ do
 		end
 		if Flags.MiniEsp then
 			for _, E in GetMiniEntries() do
+				table.insert(NewCache, E)
+			end
+		end
+		if Flags.SoldierEsp then
+			for _, E in GetNpcEntries() do
+				table.insert(NewCache, E)
+			end
+		end
+		
+		if Flags.SteelEsp or Flags.MetalCrateEsp or Flags.WoodenEsp or Flags.TrashEsp or Flags.OilEsp then
+			for _, E in GetCrateEntries() do
 				table.insert(NewCache, E)
 			end
 		end
@@ -1673,6 +1912,12 @@ local lastTcCached = 0
 			or Flags.CornEsp
 			or Flags.RaidEsp
 			or Flags.TcEsp
+			or Flags.SteelEsp
+			or Flags.MetalCrateEsp
+			or Flags.WoodenEsp
+			or Flags.OilEsp
+			or Flags.TrashEsp
+			or Flags.SoldierEsp
 
 		if not AnyEnabled then
 			HideAllEspLabels()
