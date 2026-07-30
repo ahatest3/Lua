@@ -1608,26 +1608,28 @@ do
 		EspCache = NewCache
 	end
 
-local tcCache = {}
-local lastTcUpdate = 0
-local lastTcCache = 0
+	local tcCache = {}
+	local lastTcUpdate = 0
 
-RunService.RenderStepped:Connect(function()
-	local now = tick()
-	if now - lastTcUpdate < 4 then
-		return
-	end
-		if not Flags.TcEsp then return end
-		tcCache = {}
-		local char = LocalPlayer.Character
-		local humanoid = char and char:FindFirstChildOfClass("Humanoid")
-		local HRP = char and char:FindFirstChild("HumanoidRootPart")
-		for _, E in GetTcEntries() do
-			if (HRP.Position - E.Position).Magnitude < Flags.TcEspDistance then
-			table.insert(tcCache, E)
+	RunService.RenderStepped:Connect(function()
+		local now = tick()
+
+		if now - lastTcUpdate >= 4 and Flags.TcEsp then
+			lastTcUpdate = now
+			tcCache = {}
+
+			local char = LocalPlayer.Character
+			local HRP = char and char:FindFirstChild("HumanoidRootPart")
+
+			if HRP then
+				for _, E in GetTcEntries() do
+					if (HRP.Position - E.Position).Magnitude < Flags.TcEspDistance then
+						table.insert(tcCache, E)
+					end
+				end
 			end
 		end
-end)
+	end)
 
 
 	RunService.RenderStepped:Connect(function()
