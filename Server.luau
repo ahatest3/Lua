@@ -49,7 +49,7 @@ Flags.FireRateMult = 1
 --//added
 Flags.TcAlpha = 1
 Flags.TcColor = Color3.new(0.60, 0.83, 1)
-Flags.TcEspDistance = 500
+Flags.TcEspDistance = 200
 
 
 
@@ -775,7 +775,7 @@ TcToggle:AddColorpicker("Base Cabinet Color", Color3.new(0.6, 0.831373, 1), func
 	Flags.TcAlpha = A
 end)
 
-BaseSec:Slider("Distance", 500, 50, 100, 1000, "m", function(v)
+BaseSec:Slider("Distance", 200, 25, 50, 1000, "m", function(v)
 	Flags.TcEspDistance = v
 end)
 
