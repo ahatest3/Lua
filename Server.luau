@@ -1251,13 +1251,6 @@ do
 	end)
 end
 
-
-	RunService.Heartbeat:Connect(function()
-		local Char = LocalPlayer.Character
-		local Humanoid = Char and Char:FindFirstChild("Humanoid")
-	end)
-
-
 do
 	local EspPool = {}
 
