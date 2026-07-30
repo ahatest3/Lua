@@ -1625,11 +1625,11 @@ do
 				table.insert(NewCache, E)
 			end
 		end
-		if Flags.TcEsp then
+		--[[if Flags.TcEsp then
 			for _, E in GetTcEntries() do
 				table.insert(NewCache, E)
 			end
-		end
+		end--]]
 		EspCache = NewCache
 	end
 
