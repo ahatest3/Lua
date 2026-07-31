@@ -1010,6 +1010,24 @@ end)
 MiscSec:Dropdown("Mod Checker Behavior", { "Notify" }, { "Notify", "Kick" }, false, function(v)
 	Flags.ModCheckerBehavior = v[1]
 end):Tooltip("Kick Behavior will crash your Roblox!")
+
+local noclipSec = CombatTab:Section("Noclip", "Right")
+
+
+local noclip = noclipSec:Toggle("NOCLIP INTO CARD ROOMS", false, function(Bool)
+	local char = LocalPlayer.Character
+	if not char then
+		return
+	end
+	for _, part in pairs(char:GetChildren()) do
+		if part:IsA("BasePart") or part:IsA("Part") then
+			part.CanCollide = not Bool
+		end
+	end
+end)
+
+noclip:AddKeybind("z", "Hold")  
+
 -- end of combat
 
 
