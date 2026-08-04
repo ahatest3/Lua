@@ -584,8 +584,8 @@ local Win = Lib:CreateWindow({
 	accentB     = Color3.fromRGB(189,130,255),
 	theme       = { accent = Color3.fromRGB(255,120,160) },  -- same via a theme table (accent / accentA / accentB / bg / text ...)
 	font        = "Proxima",              -- initial font: a name, or a raw Drawing.Fonts.X value
-	backgroundEffect      = "Off",       -- "Snow" / "Matrix" / "Rain" / "Off"
-	backgroundEffectColor = Color3.fromRGB(160,90,255),  -- recolour the particles
+	backgroundEffect      = "Snow",       -- "Snow" / "Matrix" / "Rain" / "Off"
+	backgroundEffectColor = Color3.fromRGB(182, 182, 182),  -- recolour the particles
 	logo        = "https://.../logo.png", -- header logo (url, path, or raw PNG/JPG bytes)
 	icon        = "https://.../icon.png", -- corner gem + minimized-bubble icon
 	opacity     = 1,                   -- 0.4..1 (or a percent like 95)
@@ -1034,7 +1034,7 @@ local PanicMode = panicSec:Toggle("Hide Esp", false, function(Bool)
 	Flags.PanicMode = Bool
 end)
 
-PanicMode:AddKeybind("", "Toggle")
+PanicMode:AddKeybind("x", "Toggle")
 -- end of combat
 
 
