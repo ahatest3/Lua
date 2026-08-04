@@ -769,14 +769,14 @@ SteelToggle:AddColorpicker("Steel Crate Color", Flags.SteelColor, function(C,A)
 	Flags.SteelAlpha = A
 end)
 
-	MonumentSec:Slider("Distance", 500, 50, 100, 1500, "m", function(v)
-		Flags.soldieres = v
-		Flags.TrashEspDistance = v
-		Flags.OilEspDistance = v
-		Flags.WoodenEspDistance = v
-		Flags.MetalCrateEspDistance = v
-		Flags.SteelEspDistance = v
-	end)
+MonumentSec:Slider("Distance", 500, 50, 100, 1500, "m", function(v)
+	Flags.soldieres = v
+	Flags.TrashEspDistance = v
+	Flags.OilEspDistance = v
+	Flags.WoodenEspDistance = v
+	Flags.MetalCrateEspDistance = v
+	Flags.SteelEspDistance = v
+end)
 
 
 --//End of monument esp
@@ -1028,6 +1028,13 @@ end)
 
 noclip:AddKeybind("z", "Hold")  
 
+local panicSec = CombatTab:Section("Panic", "Right")
+
+local PanicMode = panicSec:Toggle("Hide Esp", false, function(Bool)
+	Flags.PanicMode = Bool
+end)
+
+PanicMode:AddKeybind("", "Toggle")
 -- end of combat
 
 
@@ -1115,7 +1122,7 @@ do
 
 				Head.Size = HeadHitboxSize * Flags.BulletThickness
 				if Offsets.BasePart then
-				memory_write("float", Head.Address + Offsets.BasePart.Transparency, 0.99)
+					memory_write("float", Head.Address + Offsets.BasePart.Transparency, 0.99)
 				end
 			end
 		else
@@ -1518,7 +1525,7 @@ do
 		end
 		return Entries
 	end
-	
+
 	local function GetRecyclerEntries()
 		local Entries = {}
 		local Shredders = Workspace.Bases.Loners:FindFirstChild("Shredder")
@@ -1529,12 +1536,12 @@ do
 			if not Shredder:IsA("Model") then
 				continue
 			end
-			
+
 			local BasePart = Shredder.PrimaryPart or Shredder:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
-	
+
 			table.insert(Entries, {
 				Position = BasePart.Position + Vector3.new(0, 1, 0),
 				Text = "Recycler",
@@ -1664,8 +1671,8 @@ do
 		end
 		return Entries
 	end
-	
-	
+
+
 	local function GetFuseEntries()
 		local Entries = {}
 		local Cells = Workspace.Bases.Loners:FindFirstChild("Power Cell Box")
@@ -1690,7 +1697,7 @@ do
 		end
 		return Entries
 	end
-	
+
 
 	local function GetPowerEntries()
 		local Entries = {}
@@ -1716,7 +1723,7 @@ do
 		end
 		return Entries
 	end
-	
+
 
 	local function GetNpcEntries()
 		local Entries = {}
@@ -1747,40 +1754,40 @@ do
 				if not BasePart then
 					continue
 				end
-					table.insert(Entries, {
-						Position = BasePart.Position + Vector3.new(0, 1, 0),
-						Text = Npc.Name,
-						Color = Flags.SoldierColor,
-						Alpha = Flags.SoldierAlpha,
-						MaxDistance = Flags.SoldierEspDistance,
-					})
-				end
+				table.insert(Entries, {
+					Position = BasePart.Position + Vector3.new(0, 1, 0),
+					Text = Npc.Name,
+					Color = Flags.SoldierColor,
+					Alpha = Flags.SoldierAlpha,
+					MaxDistance = Flags.SoldierEspDistance,
+				})
 			end
-		return Entries
-	end
-	
-	
-local function GetCrateEntries()
-	local Entries = {}
-	local Loners = Workspace:FindFirstChild("Bases"):FindFirstChild("Loners")
-	if not Loners then
+		end
 		return Entries
 	end
 
-	for _, Item in ipairs(Loners:GetChildren()) do
-		if not Item:IsA("Folder") then
-			continue
+
+	local function GetCrateEntries()
+		local Entries = {}
+		local Loners = Workspace:FindFirstChild("Bases"):FindFirstChild("Loners")
+		if not Loners then
+			return Entries
 		end
 
-		for _, Crate in ipairs(Item:GetChildren()) do
-			if not Crate:IsA("Model") then
+		for _, Item in ipairs(Loners:GetChildren()) do
+			if not Item:IsA("Folder") then
 				continue
 			end
+
+			for _, Crate in ipairs(Item:GetChildren()) do
+				if not Crate:IsA("Model") then
+					continue
+				end
 				local BasePart = Crate.PrimaryPart or Crate:FindFirstChildWhichIsA("BasePart")
 				if not BasePart then
 					continue
 				end
-			if Flags.SteelEsp and string.find(Crate.Name, "Steel Crate") then
+				if Flags.SteelEsp and string.find(Crate.Name, "Steel Crate") then
 					table.insert(Entries, {
 						Position = BasePart.Position + Vector3.new(0, 1, 0),
 						Text = "Steel Crate",
@@ -1788,7 +1795,7 @@ local function GetCrateEntries()
 						Alpha = Flags.SteelAlpha,
 						MaxDistance = Flags.SteelEspDistance,
 					})
-			elseif Flags.MetalCrateEsp and string.find(Crate.Name, "Metal Crate") then
+				elseif Flags.MetalCrateEsp and string.find(Crate.Name, "Metal Crate") then
 					table.insert(Entries, {
 						Position = BasePart.Position + Vector3.new(0, 1, 0),
 						Text = "Metal Crate",
@@ -1796,7 +1803,7 @@ local function GetCrateEntries()
 						Alpha = Flags.MetalCrateAlpha,
 						MaxDistance = Flags.MetalCrateEspDistance,
 					})
-			elseif Flags.WoodenEsp and string.find(Crate.Name, "Wooden Crate") then
+				elseif Flags.WoodenEsp and string.find(Crate.Name, "Wooden Crate") then
 					table.insert(Entries, {
 						Position = BasePart.Position + Vector3.new(0, 1, 0),
 						Text = "Wooden Crate",
@@ -1820,23 +1827,23 @@ local function GetCrateEntries()
 						Alpha = Flags.OilAlpha,
 						MaxDistance = Flags.OilEspDistance,
 					})
-			else
-				continue
+				else
+					continue
+				end
 			end
 		end
+		return Entries
 	end
-	return Entries
-end
 
 	local cabinetParts = {}
 	local canBuildTc = true
-	
+
 
 
 	local function BuildTcCache()
 		print("BUILDING TC CACHES")
 		cabinetParts = {}
-	canBuildTc = false
+		canBuildTc = false
 		local Bases = Workspace:FindFirstChild("Bases")
 		if not Bases then
 			return
@@ -1846,24 +1853,24 @@ end
 
 		for _, Base in ipairs(Bases:GetChildren()) do
 			if not Base:IsA("Folder") then continue end
-				for _, Tc in ipairs(Base:GetChildren()) do
-					if not Tc:IsA("Folder") or Tc.Name ~= "Base Cabinet" then continue end
-					for _, ToolCabinet in ipairs(Tc:GetChildren()) do
-						if not ToolCabinet:IsA("Model") then continue end
-						local BasePart = ToolCabinet.PrimaryPart or ToolCabinet:FindFirstChildWhichIsA("BasePart")
+			for _, Tc in ipairs(Base:GetChildren()) do
+				if not Tc:IsA("Folder") or Tc.Name ~= "Base Cabinet" then continue end
+				for _, ToolCabinet in ipairs(Tc:GetChildren()) do
+					if not ToolCabinet:IsA("Model") then continue end
+					local BasePart = ToolCabinet.PrimaryPart or ToolCabinet:FindFirstChildWhichIsA("BasePart")
 
-						if BasePart and not cabinetParts[BasePart] then
-							table.insert(cabinetParts, BasePart)
-						end
+					if BasePart and not cabinetParts[BasePart] then
+						table.insert(cabinetParts, BasePart)
 					end
+				end
 
-					Count += 1
+				Count += 1
 			end
 		end
 		canBuildTc = true
 		print("FOUND "..Count.." BASE CABINETS")
 	end
-	
+
 
 
 
@@ -1941,9 +1948,10 @@ end
 	local EspDrawLastUpdate = 0
 	local ESP_CACHE_INTERVAL = 2
 	local ESP_DRAW_INTERVAL = 0.001
-	
-	
+
+
 	local function RebuildEspCache()
+		if Flags.PanicMode then HideAllEspLabels() return end
 		local NewCache = {}
 		if Flags.DropsEsp then
 			for _, E in GetDropEntries() do
@@ -1975,37 +1983,38 @@ end
 				table.insert(NewCache, E)
 			end
 		end
-		
+
 		if Flags.SteelEsp or Flags.MetalCrateEsp or Flags.WoodenEsp or Flags.TrashEsp or Flags.OilEsp then
 			for _, E in GetCrateEntries() do
 				table.insert(NewCache, E)
 			end
 		end
-		
+
 		if Flags.RecyclerEsp then
 			for _, E in GetRecyclerEntries() do
 				table.insert(NewCache, E)
-				end
+			end
 		end
-		
+
 		if Flags.FuseEsp then
 			for _, E in GetFuseEntries() do
 				table.insert(NewCache, E)
-				end
+			end
 		end
 		if Flags.PowerEsp then
 			for _, E in GetPowerEntries() do
 				table.insert(NewCache, E)
 			end
 		end
-		
+
 		EspCache = NewCache
 	end
 
 	local tcCache = {}
 	local lastTcUpdate = 0
-	
+
 	RunService.RenderStepped:Connect(function()		
+		if Flags.PanicMode then HideAllEspLabels() return end
 		if not Flags.TcEsp then
 			table.clear(tcCache)
 			return
@@ -2016,13 +2025,13 @@ end
 			return
 		end
 		lastTcUpdate = now
-		
+
 		if readyToBaseCache and not alreadyCachedTc then
 			BuildTcCache()
 			alreadyCachedTc = true
 		end
-		
-		
+
+
 		table.clear(tcCache)
 
 		for i = #cabinetParts, 1, -1 do
@@ -2031,20 +2040,21 @@ end
 			if not cabinet then
 				continue
 			else
-					table.insert(tcCache, {
+				table.insert(tcCache, {
 					Position = cabinet.Position,
-						Text = "Base Cabinet",
-						Color = Flags.TcColor,
-						Alpha = Flags.TcAlpha,
-						MaxDistance = Flags.TcEspDistance,
-					})
+					Text = "Base Cabinet",
+					Color = Flags.TcColor,
+					Alpha = Flags.TcAlpha,
+					MaxDistance = Flags.TcEspDistance,
+				})
 			end
 		end
 	end)
 
-local lastTcCached = 0
+	local lastTcCached = 0
 
 	RunService.RenderStepped:Connect(function()
+		if Flags.PanicMode then HideAllEspLabels() return end
 		local Now = tick()
 		local Char = LocalPlayer.Character
 		local Root = Char and Char:FindFirstChild("HumanoidRootPart")
@@ -2101,7 +2111,7 @@ local lastTcCached = 0
 				table.insert(AllEntries, E)
 			end
 		end
-		
+
 		for _, E in tcCache do
 			--print((E.Position - Root.Position).Magnitude)
 			table.insert(AllEntries, E)
@@ -2135,40 +2145,39 @@ local lastTcCached = 0
 end
 
 
-	local ModCheckerLastCheck = 0
-	local MOD_CHECKER_INTERVAL = 3
-	local SeenMods = {}
+local ModCheckerLastCheck = 0
+local MOD_CHECKER_INTERVAL = 3
+local SeenMods = {}
 
-	RunService.Heartbeat:Connect(function()
-		local Now = tick()
-		if Flags.ModChecker then
-			if Now - ModCheckerLastCheck >= MOD_CHECKER_INTERVAL then
-				ModCheckerLastCheck = Now
-				for _, Player in Players:GetPlayers() do
-					if not Player or Player.Name == LocalPlayer.Name then
-						continue
-					end
-					local Success, UserId = pcall(function()
-						return memory_read("uintptr_t", Player.Address + Offsets.Player.UserId)
-					end)
-					if not Success then
-						warn("failed to load userid for mod checker")
-					end
-					if not ModeratorIDs[UserId] or SeenMods[UserId] then
-						continue
-					end
-					if Flags.ModCheckerBehavior == "Notify" then
-						notify(
-							ModeratorIDs[UserId] .. " (" .. Player.Name .. ") joined your game!",
-							"Moderator Alert",
-							5
-						)
-						SeenMods[UserId] = true
-					elseif Flags.ModCheckerBehavior == "Kick" then
-						memory_write("string", game.Workspace.Address, "Kick")
-					end
+RunService.Heartbeat:Connect(function()
+	local Now = tick()
+	if Flags.ModChecker then
+		if Now - ModCheckerLastCheck >= MOD_CHECKER_INTERVAL then
+			ModCheckerLastCheck = Now
+			for _, Player in Players:GetPlayers() do
+				if not Player or Player.Name == LocalPlayer.Name then
+					continue
+				end
+				local Success, UserId = pcall(function()
+					return memory_read("uintptr_t", Player.Address + Offsets.Player.UserId)
+				end)
+				if not Success then
+					warn("failed to load userid for mod checker")
+				end
+				if not ModeratorIDs[UserId] or SeenMods[UserId] then
+					continue
+				end
+				if Flags.ModCheckerBehavior == "Notify" then
+					notify(
+						ModeratorIDs[UserId] .. " (" .. Player.Name .. ") joined your game!",
+						"Moderator Alert",
+						5
+					)
+					SeenMods[UserId] = true
+				elseif Flags.ModCheckerBehavior == "Kick" then
+					memory_write("string", game.Workspace.Address, "Kick")
 				end
 			end
 		end
-	end)
-
+	end
+end)
