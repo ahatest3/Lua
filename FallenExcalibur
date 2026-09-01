@@ -88,7 +88,6 @@ Flags.PowerColor = Color3.fromRGB(255, 170, 0)
 Flags.PowerEspDistance = 500
 
 
-
 local BulletInfo = {
 	["Pumpkin Launcher"] = { Speed = 80, Gravity = 0.16 },
 	["Military M4A1"] = { Speed = 2100, Gravity = 0.55 },
@@ -611,8 +610,8 @@ Win:SetTheme({
 Win:AddSettingsTab("cog")
 
 -- combat
-
---[[local AimbotSec = CombatTab:Section("Aimbot", "Left")
+--[[local CombatTab = Win:Tab("Combat", "crosshair")
+local AimbotSec = CombatTab:Section("Aimbot", "Left")
 
 local AimbotToggle = AimbotSec:Toggle("Aimbot", false, function(Bool)
 	Flags.Aimbot = Bool
@@ -666,7 +665,7 @@ end)--]]
 -- esp
 local EspTab = Win:Tab("ESP", "eye")
 
---[[local PlayerVisSec = EspTab:Section("Player", "Left")
+local PlayerVisSec = EspTab:Section("Player", "Left")
 
 PlayerVisSec:Toggle("Armor Viewer", false, function(Bool)
 	Flags.ArmorViewer = Bool
@@ -1053,46 +1052,9 @@ do
 			return
 		end
 
-		if Flags.Aimbot and Flags.AimbotActive then
-			if not Flags.LockedTarget or not Flags.LockedTarget.Humanoid or Flags.LockedTarget.Humanoid.Health <= 0 then
+			--if not Flags.LockedTarget or not Flags.LockedTarget.Humanoid or Flags.LockedTarget.Humanoid.Health <= 0 then
 				Flags.LockedTarget = FindClosestViableTarget()
-			end
-
-			if not Flags.LockedTarget or not Flags.LockedTarget.TargetPart then
-				return
-			end
-
-			local TargetPos = Flags.LockedTarget.TargetPart.Position
-			local HeldWeapon = GetHeldWeapon(LocalChar)
-			local Info = GetBulletInfo(HeldWeapon)
-
-			if not Info or not Flags.AutoPrediction then
-				Camera.lookAt(Camera.Position, TargetPos)
-				return
-			end
-
-			if HeldWeapon == "Wooden Bow" or HeldWeapon == "Crossbow" then
-				TargetPos = CalculateTargetPositionNoYPred(
-					Info.Speed,
-					Info.Gravity,
-					Flags.LockedTarget.TargetPart.Velocity,
-					TargetPos,
-					Camera.Position
-				)
-			else
-				TargetPos = CalculateTargetPosition(
-					Info.Speed,
-					Info.Gravity,
-					Flags.LockedTarget.TargetPart.Velocity,
-					TargetPos,
-					Camera.Position
-				)
-			end
-
-			Camera.lookAt(Camera.Position, TargetPos)
-		else
-			Flags.LockedTarget = nil
-		end
+			--end
 
 		if Flags.ThickBullet then
 			for _, Player in Players:GetPlayers() do
