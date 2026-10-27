@@ -1052,9 +1052,9 @@ do
 			return
 		end
 
-			--if not Flags.LockedTarget or not Flags.LockedTarget.Humanoid or Flags.LockedTarget.Humanoid.Health <= 0 then
-				Flags.LockedTarget = FindClosestViableTarget()
-			--end
+		--if not Flags.LockedTarget or not Flags.LockedTarget.Humanoid or Flags.LockedTarget.Humanoid.Health <= 0 then
+		Flags.LockedTarget = FindClosestViableTarget()
+		--end
 
 		if Flags.ThickBullet then
 			for _, Player in Players:GetPlayers() do
@@ -1430,6 +1430,8 @@ do
 		"Wool Plant Seed",
 		"Wooden Arrow",
 		"Lighter",
+		"Common Goodie Bag",
+		"Rare Goodie Bag",
 
 	}
 	local function GetDropEntries()
@@ -1442,7 +1444,7 @@ do
 			if not Item:IsA("Model") or table.find(dropExcludes, Item.Name) then
 				continue
 			end
-			local Root = Item.PrimaryPart or Item:FindFirstChildWhichIsA("BasePart")
+			local Root = Item:FindFirstChild("Main") or Item.PrimaryPart or Item:FindFirstChildWhichIsA("BasePart")
 			if not Root then
 				continue
 			end
@@ -1619,7 +1621,7 @@ do
 			if not Mini:IsA("Model") then
 				continue
 			end
-			local BasePart = Mini.PrimaryPart or Mini:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Mini:FindFirstChild("Weight") or Mini.PrimaryPart or Mini:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
@@ -1745,7 +1747,7 @@ do
 				if not Crate:IsA("Model") then
 					continue
 				end
-				local BasePart = Crate.PrimaryPart or Crate:FindFirstChildWhichIsA("BasePart")
+				local BasePart = Crate:FindFirstChild("Main") or Crate.PrimaryPart or Crate:FindFirstChildWhichIsA("BasePart")
 				if not BasePart then
 					continue
 				end
