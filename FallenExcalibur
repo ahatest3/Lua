@@ -931,7 +931,7 @@ end)
 local CombatTab = Win:Tab("Fallen", "wrench")
 
 
-local GunModsSec = CombatTab:Section("Gun Mods", "Left")
+--[[local GunModsSec = CombatTab:Section("Gun Mods", "Left")
 
 GunModsSec:Toggle("No Recoil", false, function(Bool)
 	if Bool then
@@ -998,7 +998,7 @@ end)
 
 GunModsSec:Slider("Thickness", 1, 0.1, 1, 4, "x", function(V)
 	Flags.BulletThickness = V
-end)
+end)--]]
 
 local MiscSec = CombatTab:Section("Misc", "Right")
 
