@@ -1527,7 +1527,7 @@ do
 			if not Node:IsA("Model") then
 				continue
 			end
-			local BasePart = Node:FindFirstChild("Main") or Node.PrimaryPart or Node:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Node:FindFirstChild("Main") --or Node.PrimaryPart or Node:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
@@ -1570,7 +1570,7 @@ do
 			if not Plant:IsA("Model") then
 				continue
 			end
-			local BasePart = Plant:FindFirstChild("Main") or Plant.PrimaryPart or Plant:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Plant:FindFirstChild("Main") --or Plant.PrimaryPart or Plant:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
