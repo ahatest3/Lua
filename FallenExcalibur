@@ -15,6 +15,7 @@ Flags.NodeEspDistance = 500
 Flags.MiniEspDistance = 500
 Flags.PlantEspDistance = 500
 Flags.RaidEspDistance = 2000
+Flags.CarePackageEspDistance = 2000
 Flags.FovColor = Color3.fromRGB(255, 255, 255)
 Flags.FovAlpha = 1
 Flags.SnaplineColor = Color3.fromRGB(255, 255, 255)
@@ -41,6 +42,8 @@ Flags.CornColor = Color3.new(1, 1, 0.22)
 Flags.CornAlpha = 1
 Flags.MinicopterColor = Color3.fromRGB(24, 66, 255)
 Flags.MinicopterAlpha = 1
+Flags.CarePackageColor = Color3.fromRGB(132, 0, 110)
+Flags.CarePackageAlpha = 1
 Flags.RaidColor = Color3.fromRGB(255, 14, 14)
 Flags.RaidAlpha = 1
 Flags.BulletThickness = 1
@@ -569,7 +572,7 @@ end
 
 -- ui
 local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/neaxusxgod-png/INS-ui/main/uilib.min.lua"))()
-	or INSui
+
 
 local Win = Lib:CreateWindow({
 	title       = "FUZZY'S",
@@ -903,6 +906,10 @@ local MiscEspSec = EspTab:Section("Misc", "Right")
 
 local MinicopterToggle = MiscEspSec:Toggle("Minicopter ESP", false, function(Bool)
 	Flags.MiniEsp = Bool
+end)
+
+local CarePackageToggle = MiscEspSec:Toggle("Care Package ESP", false, function(Bool)
+	Flags.CarePackageEsp = Bool
 end)
 
 MinicopterToggle:AddColorpicker("Minicopter Color", Color3.fromRGB(24, 66, 255), function(C, A)
@@ -1637,6 +1644,31 @@ do
 	end
 
 
+	local function GetAirdropEntries()
+		local Entries = {}
+		local CarePackages = Workspace.Bases.Loners:FindFirstChild("Care Package")
+		if not CarePackages then
+			return Entries
+		end
+		for _, CarePackage in CarePackages:GetChildren() do
+			if not CarePackage:IsA("Model") then
+				continue
+			end
+			local BasePart = CarePackage:FindFirstChild("Main") or CarePackage.PrimaryPart or CarePackage:FindFirstChildWhichIsA("BasePart")
+			if not BasePart then
+				continue
+			end
+			table.insert(Entries, {
+				Position = BasePart.Position + Vector3.new(0, 1, 0),
+				Text = "Care Package",
+				Color = Flags.CarePackageColor,
+				Alpha = Flags.CarePackageAlpha,
+				MaxDistance = Flags.CarePackageEspDistance,
+			})
+		end
+		return Entries
+	end
+
 	local function GetFuseEntries()
 		local Entries = {}
 		local Cells = Workspace.Bases.Loners:FindFirstChild("Power Cell Box")
@@ -1942,6 +1974,11 @@ do
 				table.insert(NewCache, E)
 			end
 		end
+		if Flags.CarePackageEsp then
+			for _, E in GetAirdropEntries() do
+				table.insert(NewCache, E)
+			end
+		end
 		if Flags.SoldierEsp then
 			for _, E in GetNpcEntries() do
 				table.insert(NewCache, E)
@@ -2049,6 +2086,7 @@ do
 			or Flags.RecyclerEsp
 			or Flags.FuseEsp
 			or Flags.PowerEsp
+			or Flags.CarePackageEsp
 
 		if not AnyEnabled then
 			HideAllEspLabels()
