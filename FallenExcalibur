@@ -913,13 +913,12 @@ local CarePackageToggle = MiscEspSec:Toggle("Care Package ESP", false, function(
 	Flags.CarePackageEsp = Bool
 end)
 
-CarePackageToggle:AddColorpicker("Care Package Color", Color3.fromRGB(Flags.CarePackageColor), function(C, A)
-	Flags.MinicopterColor = C
-	Flags.MinicopterAlpha = A
+CarePackageToggle:AddColorpicker("Care Package Color", Color3.fromRGB(143, 6, 132), function(C, A)
+	Flags.CarePackageColor = C
+	Flags.CarePackageAlpha = A
 end)
 
-MiscEspSec:Slider("Minicopter Distance", 500, 50, 100, 1500, "m", function(v)
-	Flags.MiniEspDistance = v
+MiscEspSec:Slider("Care Package Distance", 500, 50, 100, 1500, "m", function(v)
 	Flags.CarePackageEspDistance = v
 end)
 
