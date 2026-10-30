@@ -15,7 +15,6 @@ Flags.NodeEspDistance = 500
 Flags.MiniEspDistance = 500
 Flags.PlantEspDistance = 500
 Flags.RaidEspDistance = 2000
-Flags.CarePackageEspDistance = 2000
 Flags.FovColor = Color3.fromRGB(255, 255, 255)
 Flags.FovAlpha = 1
 Flags.SnaplineColor = Color3.fromRGB(255, 255, 255)
@@ -42,8 +41,6 @@ Flags.CornColor = Color3.new(1, 1, 0.22)
 Flags.CornAlpha = 1
 Flags.MinicopterColor = Color3.fromRGB(24, 66, 255)
 Flags.MinicopterAlpha = 1
-Flags.CarePackageColor = Color3.fromRGB(132, 0, 110)
-Flags.CarePackageAlpha = 1
 Flags.RaidColor = Color3.fromRGB(255, 14, 14)
 Flags.RaidAlpha = 1
 Flags.BulletThickness = 1
@@ -89,6 +86,10 @@ Flags.FuseEspDistance = 500
 Flags.PowerAlpha = 1
 Flags.PowerColor = Color3.fromRGB(255, 170, 0)
 Flags.PowerEspDistance = 500
+
+Flags.CarePackageColor = Color3.fromRGB(132, 0, 110)
+Flags.CarePackageAlpha = 1
+Flags.CarePackageEspDistance = 2000
 
 
 local BulletInfo = {
@@ -572,7 +573,7 @@ end
 
 -- ui
 local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/neaxusxgod-png/INS-ui/main/uilib.min.lua"))()
-
+	or INSui
 
 local Win = Lib:CreateWindow({
 	title       = "FUZZY'S",
@@ -910,6 +911,16 @@ end)
 
 local CarePackageToggle = MiscEspSec:Toggle("Care Package ESP", false, function(Bool)
 	Flags.CarePackageEsp = Bool
+end)
+
+CarePackageToggle:AddColorpicker("Care Package Color", Color3.fromRGB(Flags.CarePackageColor), function(C, A)
+	Flags.MinicopterColor = C
+	Flags.MinicopterAlpha = A
+end)
+
+MiscEspSec:Slider("Minicopter Distance", 500, 50, 100, 1500, "m", function(v)
+	Flags.MiniEspDistance = v
+	Flags.CarePackageEspDistance = v
 end)
 
 MinicopterToggle:AddColorpicker("Minicopter Color", Color3.fromRGB(24, 66, 255), function(C, A)
