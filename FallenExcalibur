@@ -1501,7 +1501,7 @@ do
 				continue
 			end
 
-			local BasePart = Shredder.PrimaryPart or Shredder:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Shredder:FindFirstChild("Main") or Shredder.PrimaryPart or Shredder:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
@@ -1527,7 +1527,7 @@ do
 			if not Node:IsA("Model") then
 				continue
 			end
-			local BasePart = Node.PrimaryPart or Node:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Node:FindFirstChild("Main") or Node.PrimaryPart or Node:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
@@ -1570,7 +1570,7 @@ do
 			if not Plant:IsA("Model") then
 				continue
 			end
-			local BasePart = Plant.PrimaryPart or Plant:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Plant:FindFirstChild("Main") or Plant.PrimaryPart or Plant:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
@@ -1647,7 +1647,7 @@ do
 			if not Fuse:IsA("Model") then
 				continue
 			end
-			local BasePart = Fuse.PrimaryPart or Fuse:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Fuse:FindFirstChild("Main") or Fuse.PrimaryPart or Fuse:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
@@ -1673,7 +1673,7 @@ do
 			if not Fuse:IsA("Model") then
 				continue
 			end
-			local BasePart = Fuse.PrimaryPart or Fuse:FindFirstChildWhichIsA("BasePart")
+			local BasePart = Fuse:FindFirstChild("Main") or Fuse.PrimaryPart or Fuse:FindFirstChildWhichIsA("BasePart")
 			if not BasePart then
 				continue
 			end
@@ -1714,7 +1714,7 @@ do
 				then
 					continue
 				end
-				local BasePart = Npc.PrimaryPart or Npc:FindFirstChildWhichIsA("BasePart")
+				local BasePart = Npc:FindFirstChild("Main") or Npc.PrimaryPart or Npc:FindFirstChildWhichIsA("BasePart")
 				if not BasePart then
 					continue
 				end
