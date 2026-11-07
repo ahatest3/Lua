@@ -89,7 +89,7 @@ Flags.PowerEspDistance = 500
 
 Flags.CarePackageColor = Color3.fromRGB(132, 0, 110)
 Flags.CarePackageAlpha = 1
-Flags.CarePackageEspDistance = 2000
+Flags.CarePackageEspDistance = 5000
 
 
 local BulletInfo = {
