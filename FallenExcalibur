@@ -89,7 +89,7 @@ Flags.PowerEspDistance = 500
 
 Flags.CarePackageColor = Color3.fromRGB(132, 0, 110)
 Flags.CarePackageAlpha = 1
-Flags.CarePackageEspDistance = 5000
+Flags.CarePackageEspDistance = 2000
 
 
 local BulletInfo = {
@@ -1484,26 +1484,40 @@ do
 
 	local function GetBodybagEntries()
 		local Entries = {}
-		local Bodybags = Workspace.Bases.Loners:FindFirstChild("Body Bag")
-		if not Bodybags then
-			return Entries
-		end
-		for _, Bag in Bodybags:GetChildren() do
-			if not Bag:IsA("Model") then
+		local Loners = Workspace.Bases.Loners
+
+		local Bodybags = {
+			Loners:FindFirstChild("Body Bag"),
+			Loners:FindFirstChild("Downed Body"),
+			Loners:FindFirstChild("Corpse"),
+		}
+
+		for _, Item in ipairs(Bodybags) do
+			if not Item then
 				continue
 			end
-			local Main = Bag:FindFirstChild("Main")
-			if not Main then
-				continue
+
+			for _, Bag in ipairs(Item:GetChildren()) do
+				if not Bag:IsA("Model") then
+					continue
+				end
+
+				local Main = Bag:FindFirstChild("UpperTorso") or Bag:FindFirstChild("Main")
+
+				if not Main or not Main:IsA("BasePart") then
+					continue
+				end
+
+				table.insert(Entries, {
+					Position = Main.Position + Vector3.new(0, 1, 0),
+					Text = Bag.Name,
+					Color = Flags.BodybagColor,
+					Alpha = Flags.BodybagAlpha,
+					MaxDistance = Flags.LootEspDistance,
+				})
 			end
-			table.insert(Entries, {
-				Position = Main.Position + Vector3.new(0, 1, 0),
-				Text = "Bodybag",
-				Color = Flags.BodybagColor,
-				Alpha = Flags.BodybagAlpha,
-				MaxDistance = Flags.LootEspDistance,
-			})
 		end
+
 		return Entries
 	end
 
